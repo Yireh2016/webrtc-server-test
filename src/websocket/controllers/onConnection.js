@@ -29,8 +29,9 @@ const onConnectionController = ({ io, socket, db }) => {
   });
 
   socket.on(websocket.DISCONNECT, () =>
-    onDisconnectController({ db, io, user_id })
+    onDisconnectController({ db, io, user_id, socket_id: socket.id })
   );
+
   socket.on(websocket.CALLER_DESCRIPTION_SENT, (...args) => {
     const { callerLocalDescription, callee, caller } = args[0];
     console.log("{ CALLER_DESCRIPTION_SENT }", {
@@ -42,16 +43,6 @@ const onConnectionController = ({ io, socket, db }) => {
 
     io.to(callee.socket_id).emit(websocket.INCOMMING_REMOTE_DESCRIPTION, {
       callerLocalDescription,
-      caller,
-      callee,
-    });
-  });
-
-  socket.on(websocket.ANSWER_SENT, (...args) => {
-    const { answer, callee, caller } = args[0];
-    console.log("{ ANSWER_SENT }", { answer, callee, caller });
-    io.to(caller.socket_id).emit(websocket.ASWER_RECEIVED, {
-      answer,
       caller,
       callee,
     });
@@ -90,16 +81,6 @@ const onConnectionController = ({ io, socket, db }) => {
     console.log("{ SEND_CALLEE_ICE }", { args });
     io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_ICE, {
       candidate,
-    });
-  });
-
-  socket.on(websocket.CALLEE_ICE_OUT, (...args) => {
-    const { callee, candidate, caller } = args[0];
-    console.log("{ CALLEE_ICE_OUT }", { args });
-    io.to(caller.socket_id).emit(websocket.CALLEE_ICE_IN, {
-      candidate,
-      caller,
-      callee,
     });
   });
 
