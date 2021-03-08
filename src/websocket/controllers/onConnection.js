@@ -78,20 +78,26 @@ const onConnectionController = ({ io, socket, db }) => {
   });
 
   socket.on(websocket.SEND_CALLER_ICE, (...args) => {
-    const { callee, callerIce, caller } = args[0];
+    const { callee, candidate } = args[0];
     console.log("{ SEND_CALLER_ICE }", { args });
     io.to(callee.socket_id).emit(websocket.INCOMMING_CALLER_ICE, {
-      callerIce,
-      caller,
-      callee,
+      candidate,
+    });
+  });
+
+  socket.on(websocket.SEND_CALLEE_ICE, (...args) => {
+    const { candidate, caller } = args[0];
+    console.log("{ SEND_CALLEE_ICE }", { args });
+    io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_ICE, {
+      candidate,
     });
   });
 
   socket.on(websocket.CALLEE_ICE_OUT, (...args) => {
-    const { callee, callerIce, caller } = args[0];
+    const { callee, candidate, caller } = args[0];
     console.log("{ CALLEE_ICE_OUT }", { args });
     io.to(caller.socket_id).emit(websocket.CALLEE_ICE_IN, {
-      callerIce,
+      candidate,
       caller,
       callee,
     });
@@ -106,14 +112,37 @@ const onConnectionController = ({ io, socket, db }) => {
     });
   });
 
-  socket.on(websocket.SEND_CALLEE_CALL_ACEPTED, (...args) => {
-    console.log("{ SEND_CALLEE_CALL_ACEPTED   }", { args });
-    const { callee, caller } = args[0];
+  socket.on(websocket.SEND_CALLEE_CALL_ACCEPTED, (...args) => {
+    console.log("{ SEND_CALLEE_CALL_ACCEPTED   }", { args });
+    const { caller } = args[0];
 
-    io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_CALL_ACEPTED, {
+    io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_CALL_ACCEPTED, {
       caller,
+    });
+  });
+
+  socket.on(websocket.SEND_CALLER_END_CALL, (...args) => {
+    console.log("{ SEND_CALLER_END_CALL   }", { args });
+    const { callee } = args[0];
+
+    io.to(callee.socket_id).emit(websocket.INCOMMING_CALLER_END_CALL, {
       callee,
     });
+  });
+
+  socket.on(websocket.SEND_CALLEE_END_CALL, (...args) => {
+    console.log("{ SEND_CALLEE_END_CALL   }", { args });
+    const { caller } = args[0];
+
+    io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_END_CALL, {
+      caller,
+    });
+  });
+
+  socket.on(websocket.SEND_CALLEE_CALL_REJECTED, (...args) => {
+    console.log("{ SEND_CALLEE_CALL_REJECTED   }", { args });
+    const { caller } = args[0];
+    io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_CALL_REJECTED);
   });
 };
 
