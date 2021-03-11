@@ -41,7 +41,7 @@ const onConnectionController = ({ io, socket, db }) => {
       args,
     });
 
-    io.to(callee.socket_id).emit(websocket.INCOMMING_REMOTE_DESCRIPTION, {
+    io.to(callee.socket_id).emit(websocket.INCOMING_REMOTE_DESCRIPTION, {
       callerLocalDescription,
       caller,
       callee,
@@ -51,7 +51,7 @@ const onConnectionController = ({ io, socket, db }) => {
   socket.on(websocket.SEND_CALLER_OFFER, (...args) => {
     const { offer, callee, caller } = args[0];
     console.log("{ SEND_CALLER_OFFER }", { offer, callee, caller });
-    io.to(callee.socket_id).emit(websocket.INCOMMING_CALLER_OFFER, {
+    io.to(callee.socket_id).emit(websocket.INCOMING_CALLER_OFFER, {
       offer,
       caller,
       callee,
@@ -61,7 +61,7 @@ const onConnectionController = ({ io, socket, db }) => {
   socket.on(websocket.SEND_CALLEE_ANSWER, (...args) => {
     const { answer, callee, caller } = args[0];
     console.log("{ SEND_CALLEE_ANSWER }", { answer, callee, caller });
-    io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_ANSWER, {
+    io.to(caller.socket_id).emit(websocket.INCOMING_CALLEE_ANSWER, {
       answer,
       caller,
       callee,
@@ -71,7 +71,7 @@ const onConnectionController = ({ io, socket, db }) => {
   socket.on(websocket.SEND_CALLER_ICE, (...args) => {
     const { callee, candidate } = args[0];
     console.log("{ SEND_CALLER_ICE }", { args });
-    io.to(callee.socket_id).emit(websocket.INCOMMING_CALLER_ICE, {
+    io.to(callee.socket_id).emit(websocket.INCOMING_CALLER_ICE, {
       candidate,
     });
   });
@@ -79,7 +79,7 @@ const onConnectionController = ({ io, socket, db }) => {
   socket.on(websocket.SEND_CALLEE_ICE, (...args) => {
     const { candidate, caller } = args[0];
     console.log("{ SEND_CALLEE_ICE }", { args });
-    io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_ICE, {
+    io.to(caller.socket_id).emit(websocket.INCOMING_CALLEE_ICE, {
       candidate,
     });
   });
@@ -87,7 +87,7 @@ const onConnectionController = ({ io, socket, db }) => {
   socket.on(websocket.SEND_CALLER_CALLING, (...args) => {
     const { callee, caller } = args[0];
     console.log("{ SEND_CALLER_CALLING }", { args });
-    io.to(callee.socket_id).emit(websocket.INCOMMING_CALLER_CALLING, {
+    io.to(callee.socket_id).emit(websocket.INCOMING_CALLER_CALLING, {
       caller,
       callee,
     });
@@ -97,7 +97,7 @@ const onConnectionController = ({ io, socket, db }) => {
     console.log("{ SEND_CALLEE_CALL_ACCEPTED   }", { args });
     const { caller } = args[0];
 
-    io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_CALL_ACCEPTED, {
+    io.to(caller.socket_id).emit(websocket.INCOMING_CALLEE_CALL_ACCEPTED, {
       caller,
     });
   });
@@ -106,7 +106,7 @@ const onConnectionController = ({ io, socket, db }) => {
     console.log("{ SEND_CALLER_END_CALL   }", { args });
     const { callee } = args[0];
 
-    io.to(callee.socket_id).emit(websocket.INCOMMING_CALLER_END_CALL, {
+    io.to(callee.socket_id).emit(websocket.INCOMING_CALLER_END_CALL, {
       callee,
     });
   });
@@ -115,7 +115,7 @@ const onConnectionController = ({ io, socket, db }) => {
     console.log("{ SEND_CALLEE_END_CALL   }", { args });
     const { caller } = args[0];
 
-    io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_END_CALL, {
+    io.to(caller.socket_id).emit(websocket.INCOMING_CALLEE_END_CALL, {
       caller,
     });
   });
@@ -123,7 +123,7 @@ const onConnectionController = ({ io, socket, db }) => {
   socket.on(websocket.SEND_CALLEE_CALL_REJECTED, (...args) => {
     console.log("{ SEND_CALLEE_CALL_REJECTED   }", { args });
     const { caller } = args[0];
-    io.to(caller.socket_id).emit(websocket.INCOMMING_CALLEE_CALL_REJECTED);
+    io.to(caller.socket_id).emit(websocket.INCOMING_CALLEE_CALL_REJECTED);
   });
 };
 
